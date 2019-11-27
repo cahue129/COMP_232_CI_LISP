@@ -88,7 +88,7 @@ AST_NODE *createFunctionNode(char *funcName, AST_NODE *op1, AST_NODE *op2)
     // When you do have a CUSTOM_OPER, you do NOT need to allocate and strcpy here.
     // The funcName will be a string identifier for which space should be allocated in the tokenizer.
     // For CUSTOM_OPER functions, you should simply assign the "ident" pointer to the passed in funcName.
-    // For functions other than CUSTOM_OPER, you should free the funcName after you're assigned the OPER_TYPE.
+    // For functions other than CUSTOM_OPER, you should free the funcName after you've assigned the OPER_TYPE.
 
     return node;
 }
@@ -141,8 +141,7 @@ RET_VAL eval(AST_NODE *node)
     return result;
 }  
 
-// returns a pointer to the NUM_AST_NODE (aka RET_VAL) referenced by node.
-// DOES NOT allocate space for a new RET_VAL.
+// returns a RET_VAL with the data stored in the number node
 RET_VAL evalNumNode(AST_NODE *node)
 {
     if (!node)
