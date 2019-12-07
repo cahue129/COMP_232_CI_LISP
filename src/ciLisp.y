@@ -31,7 +31,7 @@ s_expr:
         $$ = $1;
     }
     | f_expr {
-        $$ = $1;
+        
     }
     | QUIT {
         fprintf(stderr, "yacc: s_expr ::= QUIT\n");
@@ -45,22 +45,18 @@ s_expr:
 
 number:
     INT {
-        fprintf(stderr, "yacc: number ::= INT\n");
-        $$ = createNumberNode($1, INT_TYPE);
-    }
-    | DOUBLE {
-        fprintf(stderr, "yacc: number ::= DOUBLE\n");
-        $$ = createNumberNode($1, DOUBLE_TYPE);
+
     };
 
 f_expr:
-    LPAREN FUNC s_expr RPAREN {
-        fprintf(stderr, "yacc: s_expr ::= LPAREN FUNC expr RPAREN\n");
-        $$ = createFunctionNode($2, $3, NULL);
-    }
-    | LPAREN FUNC s_expr s_expr RPAREN {
-        fprintf(stderr, "yacc: s_expr ::= LPAREN FUNC expr expr RPAREN\n");
-        $$ = createFunctionNode($2, $3, $4);
+    LPAREN FUNC s_expr_list RPAREN {
+        
+    };
+
+s_expr_list:
+    s_expr {
+        fprintf(stderr, "yacc: s_expr_list ::= s_expr\n");
+        $$ = $1;
     };
 %%
 
