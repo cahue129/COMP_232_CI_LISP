@@ -56,7 +56,7 @@ The non-terminals **s_expr** and **f_expr** are shorthand:
 
 ## DATA STRUCTURES
 
-Next we'll discuss the structures provided in **ciLisp.h**. For a more intuitive understanding of the structures and their names defined here, note that **AST** is short for *__A__bstract __S__yntax __T__ree*. As such, the structures discussed below are intended to house data in an abstract syntax tree.
+Next we'll discuss the structures provided in [ciLisp.h](../src/ciLisp.h). For a more intuitive understanding of the structures and their names defined here, note that **AST** is short for *__A__bstract __S__yntax __T__ree*. As such, the structures discussed below are intended to house data in an abstract syntax tree.
 
 ### NUMBERS
 
@@ -130,9 +130,9 @@ This struct stores the operator used in the function call (a member of the **OPE
 
 It also houses a *char \** so it can store the identifier of the function in string form. Note that this is only necessary for user defined functions (functions of type **CUSTOM_OPER**), which will be implemented in a later task. The **ident** field in the **FUNC\_AST\_NODE** should not be populated for any other functions. Instead, the **oper** field should be assigned to the **OPER_TYPE** member corresponding to the function name.
 
-Take note of the `resolveFunc` function, declared in **ciLisp.h** and defined in **ciLisp.c**. This function takes as input a function's name, and outputs the corresponding **OPER_TYPE** member. It will be used to populate the **oper** field in each **FUNC\_AST\_NODE** while parsing.
+Take note of the `resolveFunc` function defined in [ciLisp.c](../src/ciLisp.c). This function takes as input a function's name, and outputs the corresponding **OPER_TYPE** member. It will be used to populate the **oper** field in each **FUNC\_AST\_NODE** while parsing.
 
-Also note that the `resolveFunc` works because the array of function names (`funcNames`, in **ciLisp.c**) lists all functions in the same order as the **OPER_TYPES** enum. If either of these is edited, the other must also be edited to match.
+Also note that the `resolveFunc` works because the array of function names (`funcNames`, in [ciLisp.c](../src/ciLisp.c)) lists all functions in the same order as the **OPER_TYPES** enum. If either of these is edited, the other must also be edited to match.
 
 ### GENERIC NODES
 
@@ -160,9 +160,9 @@ An **AST\_NODE** stores a member of the **AST\_NODE\_TYPE** enum in it's **type*
 
 ## Tokenization
 
-First, it is necessary to define all tokens and all non-terminals within the grammar. **token**s (and non-terminals, called **type**s by yacc), will be defined in **ciLisp.y**. The provided tokenization and parsing definitions in **ciLisp.y** are:
+First, it is necessary to define all tokens and all non-terminals within the grammar. **token**s (and non-terminals, called **type**s by yacc), will be defined in [ciLisp.y](../src/ciLisp.y). The provided tokenization and parse definitions are:
 
-```c
+```bison
 %union {
     double dval;
     char *sval;
@@ -188,21 +188,21 @@ The token definitions are followed by type definitions. The data for types **s_e
 
 The tokens defined by the yacc file must be tokenized. As we know, the lex file is used to configure a tokenizer.
 
-The provided **ciLisp.l** is only partially complete. It has rules to tokenize and return some tokens, but not all of them. You must complete **ciLisp.l**. Identify all missing tokens and tokenize them. Use the syntax for the provided tokenizations (and your knowledge of regular expressions) as an example. Refer to the Bison and Flex documentation to determine what capabilities are available for these regular expressions.
+The provided [ciLisp.l](../src/ciLisp.l) is only partially complete. It has rules to tokenize and return some tokens, but not all of them. You must complete it. Identify all missing tokens and tokenize them. Use the syntax for the provided tokenizations as an example. Refer to the Bison and Flex documentation for a regular expression reference.
 
-Use the **INT** tokenization as an example for double (pay attention to how the value of the token is stored as a double). Note how the string value (representing function names) is stored alongside **FUNC** tokens; you will not need to assign string values to any other tokens yet, but you will in later tasks!
+Use the **INT** tokenization as an example for double (pay attention to how the value of the token is stored as a double). Note how the string value (representing function names) is stored alongside **FUNC** tokens; you will not need to assign string values to any other tokens other than **FUNC** yet, but you will in later tasks.
 
-Note that while there is a rule to tokenize functions, most of the function names are missing and therefore won't be tokenized!
+While there is a rule to tokenize functions, most of the function names are missing and therefore won't be tokenized until they are added!
 
-Pay attention to the `fprintf` calls made for debugging purposes each time a token is created. Any tokenizations that you add should include similar prints.
+Pay attention to the `fprintf` calls made for debugging purposes each time a token is created.  These will display in red in the console, unless the `freopen` in the main at the bottom of [ciLisp.l](../src/ciLisp.l) is uncommented. Any tokenizations that you add should include similar prints.
 
 ## PARSING
 
-The goal of the parser is to construct an abstract syntax tree after tokenization. Most of the productions in your grammar will have an equivalent production in **ciLisp.y**, which is the configuration file for the parser.
+The goal of the parser is to construct an abstract syntax tree after tokenization. Most of the productions in your grammar will have an equivalent production in [ciLisp.y](../src/ciLisp.y), which is the configuration file for the parser.
 
-The first production in **ciLisp.y** :
+The first production in [ciLisp.y](../src/ciLisp.y) :
 
-```c
+```bison
 program:
     s_expr EOL {
         fprintf(stderr, "yacc: program ::= s_expr EOL\n");
@@ -219,11 +219,11 @@ is the implementation of the first production in the grammar itself:
 program ::= s_expr EOL
 ```
 
-The first part, `program: s_expr EOL` denotes that in the grammar a **program** can be created via reduction with an **s_expr** followed by an **EOL** token. The values of this **s_expr** and **EOL** can be referenced with `$1` and `$2` respectively. If there were a third element in the reduction to a **program**, that third element's value could be references with `$3` and so on.
+The first part of the production configuration `program: s_expr EOL` denotes that when parsing a **program** can be created via reduction from an **s_expr** followed by an **EOL** token. The values of this **s_expr** and **EOL** can be referenced with `$1` and `$2` respectively. If there were a third element in the reduction to a **program**, that third element's value could be references with `$3` and so on.
 
 The rest of the production, this block:
 
-```c
+```bison
 {
     fprintf(stderr, "yacc: program ::= s_expr EOL\n");
     if ($1) {
@@ -235,15 +235,15 @@ The rest of the production, this block:
 
 denotes what should be done when that reduction is made.
 
-The `fprintf` call is a debug print, stating which reduction was made. Any productions that you implement should include similar prints.
+The `fprintf` call is a debug print, stating which reduction was made. Like those in the tokenizer, these `fprintf` calls will display in red unless the `freopen` in the main at the bottom of [ciLisp.l](../src/ciLisp.l) is uncommented. Any productions that you implement should include similar prints.
 
-The line `printRetVal(eval($1))` first calls the `eval` function on `$1` and then prints the resulting **RET\_VAL**. Note that `$1` is the value of the **s_expr** being used in the reduction, and that any **s_expr**'s value is an **AST\_NODE \*** as defined further up in **ciLisp.y**.
+The line `printRetVal(eval($1))` first calls the `eval` function on `$1` and then prints the resulting **RET\_VAL**. Note that `$1` is the value of the **s_expr** being used in the reduction, and that any **s_expr**'s value is an **AST\_NODE \*** as defined further up in [ciLisp.y](../src/ciLisp.y).
 
 Then, the line `freeNode($1)` recursively frees the abstract syntax tree, starting from the **AST_NODE** references by `$1`, which is the root of the tree.
 
 The rest of the yacc file is incomplete. Some productions are missing bodies, while others are missing entirely:
 
-```c
+```bison
 s_expr:
     number {
         fprintf(stderr, "yacc: s_expr ::= number\n");
@@ -279,11 +279,11 @@ s_expr_list:
     };
 ```
 
-Note that `$$`, wherever it appears, references the value that should be assigned to the result of the reduction from that production. For instance, in the `s_expr: number` production, `$$ = $1;` means "assign to the **s_expr** being created the value of the **number** which comprises it". **s_expr** and **number** both have type **AST_NODE \*** (as defined earlier in **ciLisp.y**), so this assignment is perfectly valid.
+Note that `$$`, wherever it appears, references the value that should be assigned to the result of the reduction from that production. For instance, in the `s_expr: number` production, `$$ = $1;` means "assign to the **s_expr** being created the value of the **number** which comprises it". **s_expr** and **number** both have type **AST_NODE \*** (as defined earlier in [ciLisp.y](../src/ciLisp.y)), so this assignment is perfectly valid.
 
 The goal in *most* productions is to assign value to the syntax tree element being reduced to based on the values of the elements from which it is being composed.
 
-Many of these productions will need to call the functions declared at the bottom of **ciLisp.h**:
+Many of these productions will need to call the functions declared at the bottom of [ciLisp.h](../src/ciLisp.h):
 
 ```c
 AST_NODE *createNumberNode(double value, NUM_TYPE type);
@@ -291,7 +291,9 @@ AST_NODE *createFunctionNode(char *funcName, AST_NODE *opList);
 AST_NODE *addOperandToList(AST_NODE *newHead, AST_NODE *list);
 ```
 
-These functions need to be defined in **ciLisp.c**; some of their definitions are partially completed already. They all already exist in **ciLisp.c** and are heavily commented, detailing what each function needs to do.
+These functions need to be defined in [ciLisp.c](../src/ciLisp.c); some of their definitions are partially completed already. They all already exist in [ciLisp.c](../src/ciLisp.c) and are heavily commented, detailing what each function needs to do.
+
+Whenever a function needs to be accessible by the parser (that is, if the config file [ciLisp.y](../src/ciLisp.y) calls it) it must be declared in [ciLisp.h](../src/ciLisp.h).
 
 For instance, in the `number: INT` production, you will likely want to assign `$$` (the value of the **number**) to the result of a call to `createNumberNode`, which should create an **AST_NODE** housing a **NUMBER\_AST\_NODE** whose data is populated with that from the **INT** token.
 
@@ -386,13 +388,13 @@ You will need to create functions to evaluate each of these operations given the
 	* return type is the type of the minimum operand
 	* if given no operands, throws an error
 
-Unary functions take 1 operand, binary take 2 operands, and *n*-ary take any number of operands. Functions which are given too few operands should throw errors (see `yyerror` in **ciLisp.c** and **ciLisp.h**). Functions which are given too many operands should print a warning stating that the extra operands were ignored, and only use the required number of operands in calculation. Whenever an error is thrown, the function which threw it should return an integer with value `NAN` (short for "not a number").
+Unary functions take 1 operand, binary take 2 operands, and *n*-ary take any number of operands. Functions which are given too few operands should throw errors (see `yyerror` in [ciLisp.c](../src/ciLisp.c) and [ciLisp.h](../src/ciLisp.h)). Functions which are given too many operands should print a warning stating that the extra operands were ignored (see `printWarning` in [ciLisp.c](../src/ciLisp.c), and only use the required number of operands in calculation. Whenever an error is thrown, the function which threw it should return an integer with value `NAN` (short for "not a number").
 
 Check out the `math` library (open the console and type `man math` to get its documentation) before starting these implementations. Note that many of the `math` library functions don't quite work how we want them to (for instance, `math`'s `remainder` can return a negative value, and our implementation needs to deal with that).
 
 ## DISPLAYING VALUES
 
-In order to see our outputs, it is necessary to define a function to print **RET_VAL** data. You will need to complete the `printRetVal` function in **ciLisp.c** to this end. Check the sample runs below to see how outputs should be formatted.
+In order to see our outputs, it is necessary to define a function to print **RET_VAL** data. You will need to complete the `printRetVal` function in [ciLisp.c](../src/ciLisp.c) to this end. Check the sample runs below to see how outputs should be formatted.
 
 ## <a name="sample-runs"></a>SAMLPLE RUNS
 
@@ -1015,8 +1017,8 @@ Double : -12.000000
 Process finished with exit code 0
 ```
 
-### composite tests
-Note that you should perform tests to ensure that every function works with composition.
+### composition tests
+Note that you should perform tests to ensure that none of your functions break when composed. Below are a few examples, but you should do more than just the tests below.
 
 ```
 > (log (exp (log (exp 1))))
