@@ -351,11 +351,11 @@ You will need to create functions to evaluate each of these operations given the
 	* return must be non-negative
 * exp
 	* unary
-	* returns $e$ raised to the specified power
+	* returns _e_ raised to the specified power
 	* always returns a double
 * exp2
 	* unary
-	* returns $2$ raised to the specified power
+	* returns _2_ raised to the specified power
 	* if operand is negative, return type is always double
 	* otherwise, return type depends on operand type
 * pow
@@ -396,7 +396,7 @@ Check out the `math` library (open the console and type `man math` to get its do
 
 ## DISPLAYING VALUES
 
-In order to see our outputs, it is necessary to define a function to print **RET_VAL** data. You will need to complete the `printRetVal` function in [ciLisp.c](../src/ciLisp.c) to this end. Check the sample runs below to see how outputs should be formatted.
+In order to see our outputs, it is necessary to define a function to print **RET_VAL** data. You will need to complete the `printRetVal` function in [ciLisp.c](../src/ciLisp.c) to this end. Check the sample runs below to see how outputs should be [formatted](https://en.cppreference.com/w/c/io/fprintf).
 
 ## <a name="sample-runs"></a>SAMLPLE RUNS
 
