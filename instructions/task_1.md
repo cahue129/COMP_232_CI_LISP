@@ -34,7 +34,7 @@ FUNC ::= neg | abs | add | sub |
 	print | read | equal | less |
 	greater
 
-number ::= int | double
+number ::= INT | DOUBLE
 
 INT ::= optional +/-,
 	then some digits
@@ -45,8 +45,6 @@ DOUBLE ::= optional +/-,
 	then optional some more digits
 	
 QUIT ::= "quit"
-
-digit ::= ...
 ```
 
 The non-terminals **s_expr** and **f_expr** are shorthand:
@@ -279,9 +277,13 @@ s_expr_list:
     };
 ```
 
-Note that `$$`, wherever it appears, references the value that should be assigned to the result of the reduction from that production. For instance, in the `s_expr: number` production, `$$ = $1;` means "assign to the **s_expr** being created the value of the **number** which comprises it". **s_expr** and **number** both have type **AST_NODE \*** (as defined earlier in [ciLisp.y](../src/ciLisp.y)), so this assignment is perfectly valid.
+Note that `$$`, wherever it appears, references the value that should be assigned to the result of the reduction. For instance, in the `s_expr: number` production, `$$ = $1;` means "assign to the **s_expr** being created the value of the **number** which comprises it". **s_expr** and **number** both have type **AST_NODE \*** (as defined earlier in [ciLisp.y](../src/ciLisp.y)), so this assignment is perfectly valid.
 
-The goal in *most* productions is to assign value to the syntax tree element being reduced to based on the values of the elements from which it is being composed.
+The goal in *most* productions is to assign value to the syntax tree element being reduced to based on the values of the elements from which it is being composed. This often requires either the creation and population of an appropriate struct instance or adding references between existing struct instances.
+
+The figure below (which can be found [here](../figures/task_1/task_1.png)) may help you visualize what needs to be done. Note that some reductions in the grammar are not illustrated in the figure.
+
+![figure_t1](../figures/task_1/task_1.png)
 
 Many of these productions will need to call the functions declared at the bottom of [ciLisp.h](../src/ciLisp.h):
 
@@ -452,7 +454,7 @@ ERROR: abs called with no args.
 Integer : nan
 
 > (abs -1 2)
-WARNING: abs call with extra operands. Only first arg used!
+WARNING: abs call with extra operands. Only first operand used!
 Integer : 1
 
 > quit
