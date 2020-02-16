@@ -12,7 +12,7 @@ set_property(TARGET cilisp PROPERTY C_STANDARD 11)
 set_property(TARGET cilisp PROPERTY C_STANDARD_REQUIRED ON)
 
 #Turning on MANY warnings
-target_compile_options(cilisp PRIVATE -Wall -Wextra -Wpedantic)
+target_compile_options(cilisp PRIVATE -Wall)
 
 #Allow folders/files in ./scr to be includable to all .c/.h files
 target_include_directories(cilisp PRIVATE src)
@@ -25,14 +25,14 @@ target_include_directories(cilisp PRIVATE src/bison)
 find_package(FLEX)
 find_package(BISON)
 
-#Create a Flex target and a Bison target that output .c and .h files
+#Create a Flex target and a Bison target that output .c files
 #These targets (unlike cilisp) don't create executables nor libraries
 FLEX_TARGET(ciLispScanner src/ciLisp.l ${CMAKE_SOURCE_DIR}/src/flex/ciLispScanner.c COMPILE_FLAGS)
 BISON_TARGET(ciLispParser src/ciLisp.y ${CMAKE_SOURCE_DIR}/src/bison/ciLispParser.c VERBOSE COMPILE_FLAGS "-Wall")
+#Make the bison target also generate a .h file
 ADD_FLEX_BISON_DEPENDENCY(ciLispScanner ciLispParser)
 
 #Add all the source files to cilisp target
-target_sources(cilisp PRIVATE src/builtin.c src/builtin.h)
 target_sources(cilisp PRIVATE src/ciLisp.c src/ciLisp.h)
 target_sources(cilisp PRIVATE ${BISON_ciLispParser_OUTPUTS})
 target_sources(cilisp PRIVATE ${FLEX_ciLispScanner_OUTPUTS})
