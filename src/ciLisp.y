@@ -12,7 +12,7 @@
 %token <dval> INT DOUBLE
 %token LPAREN RPAREN EOL QUIT
 
-%type <astNode> s_expr f_expr number
+%type <astNode> s_expr f_expr number s_expr_list
 
 %%
 
