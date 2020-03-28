@@ -10,6 +10,8 @@
 
 #include "ciLispParser.h"
 
+#define DEFAULT_RET_VAL (RET_VAL){INT_TYPE, NAN}
+
 int yyparse(void);
 
 int yylex(void);

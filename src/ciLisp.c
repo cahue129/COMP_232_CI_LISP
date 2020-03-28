@@ -109,9 +109,9 @@ AST_NODE *addOperandToList(AST_NODE *newHead, AST_NODE *list)
 RET_VAL evalNumNode(AST_NODE *node)
 {
     if (!node)
-        return (RET_VAL){INT_TYPE, NAN};
+        return DEFAULT_RET_VAL;
 
-    RET_VAL result = {INT_TYPE, NAN};
+    RET_VAL result = DEFAULT_RET_VAL;
 
     // TODO populate result with the values stored in the node.
     // SEE: AST_NODE, AST_NODE_TYPE, NUM_AST_NODE
@@ -132,9 +132,9 @@ RET_VAL evalNumNode(AST_NODE *node)
 RET_VAL evalFuncNode(AST_NODE *node)
 {
     if (!node)
-        return (RET_VAL){INT_TYPE, NAN};
+        return DEFAULT_RET_VAL;
 
-    RET_VAL result = {INT_TYPE, NAN};
+    RET_VAL result = DEFAULT_RET_VAL;
 
     // TODO populate result with the result of running the function on its operands.
     // SEE: AST_NODE, AST_NODE_TYPE, FUNC_AST_NODE
@@ -150,9 +150,9 @@ RET_VAL evalFuncNode(AST_NODE *node)
 RET_VAL eval(AST_NODE *node)
 {
     if (!node)
-        return (RET_VAL){INT_TYPE, NAN};
+        return DEFAULT_RET_VAL;
 
-    RET_VAL result = {INT_TYPE, NAN}; // see NUM_AST_NODE, because RET_VAL is just an alternative name for it.
+    RET_VAL result = DEFAULT_RET_VAL; // see NUM_AST_NODE, because RET_VAL is just an alternative name for it.
 
     // TODO complete the switch.
     // Make calls to other eval functions based on node type.
