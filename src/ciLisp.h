@@ -12,6 +12,8 @@
 
 #define DEFAULT_RET_VAL (RET_VAL){INT_TYPE, NAN}
 
+FILE* flex_bison_log_file;
+
 int yyparse(void);
 
 int yylex(void);

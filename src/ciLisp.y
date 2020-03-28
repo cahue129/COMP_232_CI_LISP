@@ -1,5 +1,6 @@
 %{
     #include "ciLisp.h"
+    #define ylog(r, p) fprintf(flex_bison_log_file, "BISON: %s ::= %s \n", #r, #p)
 %}
 
 %union {
@@ -10,7 +11,7 @@
 
 %token <sval> FUNC
 %token <dval> INT DOUBLE
-%token LPAREN RPAREN EOL QUIT EOFT
+%token LPAREN RPAREN EOL QUIT EOFT INVALID
 
 %type <astNode> s_expr f_expr number s_expr_list
 
@@ -18,14 +19,14 @@
 
 program:
     s_expr EOL {
-        fprintf(stderr, "yacc: program ::= s_expr EOL\n");
+        ylog(program, s_expr EOL);
         if ($1) {
             printRetVal(eval($1));
             YYACCEPT;
         }
     }
     | s_expr EOFT {
-        fprintf(stderr, "yacc: program ::= s_expr EOFT\n");
+        ylog(program, s_expr EOFT);
         if ($1) {
             printRetVal(eval($1));
         }
@@ -37,18 +38,18 @@ program:
 
 s_expr:
     number {
-        fprintf(stderr, "yacc: s_expr ::= number\n");
+        ylog(s_expr, number);
         $$ = $1;
     }
     | f_expr {
-        
+
     }
     | QUIT {
-        fprintf(stderr, "yacc: s_expr ::= QUIT\n");
+        ylog(s_expr, QUIT);
         exit(EXIT_SUCCESS);
     }
     | error {
-        fprintf(stderr, "yacc: s_expr ::= error\n");
+        ylog(s_expr, error);
         yyerror("unexpected token");
         $$ = NULL;
     };
@@ -65,7 +66,7 @@ f_expr:
 
 s_expr_list:
     s_expr {
-        fprintf(stderr, "yacc: s_expr_list ::= s_expr\n");
+        ylog(s_expr_list, s_expr);
         $$ = $1;
     };
 %%

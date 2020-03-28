@@ -4,6 +4,8 @@
 
 %{
     #include "ciLisp.h"
+    #define FLEX_BISON_LOG_PATH "../logs/flex_bison.log"
+    #define llog(token) fprintf(flex_bison_log_file, "LEX: %s \"%s\"\n", #token, yytext);
 %}
 
 digit [0-9]
@@ -17,27 +19,27 @@ func "neg"|"abs"|"add"|"sub"|"mult"|"div"
     }
 
 {int} {
+    llog(INT);
     yylval.dval = strtod(yytext, NULL);
-    fprintf(stderr, "lex: INT dval = %lf\n", yylval.dval);
     return INT;
     }
 
 
 {func} {
+    llog(FUNC);
     yylval.sval = (char *) malloc(strlen(yytext)*sizeof(char)+1);
     strcpy(yylval.sval, yytext);
-    fprintf(stderr, "lex: FUNC sval = %s\n", yylval.sval);
     return FUNC;
     }
 
 [\n] {
-    fprintf(stderr, "lex: EOL\n");
+    llog(EOL);
     YY_FLUSH_BUFFER;
     return EOL;
     }
-    
+
 <<EOF>>  {
-    fprintf(stderr, "lex: EOF\n");
+    llog(EOFT);
     return EOFT;
     }
 
@@ -45,7 +47,7 @@ func "neg"|"abs"|"add"|"sub"|"mult"|"div"
 
 
 . { // anything else
-    printf("ERROR: invalid character: >>%s<<\n", yytext);
+    llog(INVALID);
     }
 
 %%
@@ -59,13 +61,22 @@ func "neg"|"abs"|"add"|"sub"|"mult"|"div"
 
 #include <stdio.h>
 
-int main(void) 
+int main(int argc, char **argv)
 {
-    //Uncomment to remove logging.
-    freopen("/dev/null", "w", stderr);
+    int input_from_file = 0;
+    flex_bison_log_file = stderr;
+
+    // Comment the line below get inputs from the file specified in the program arguments
+    // Otherwise they will need to be typed into the console
+    freopen(argv[1], "r", stdin); input_from_file = 1;
+
+    // Comment the line below to have flex and bison logging appear in stderr (red in the console)
+    // Otherwise, this logging will appear in the logs folder.
+    flex_bison_log_file = fopen(FLEX_BISON_LOG_PATH, "w");
 
     while(1) {
-        printf(">: ");
+        if (!input_from_file)
+            printf(">: ");
         if (yyparse()) {
             YY_FLUSH_BUFFER;
         }
