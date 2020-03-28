@@ -47,11 +47,17 @@ Tasks **must** be completed sequentially. If you implement tasks 1, 2, 4 and 5, 
 
 Task 1 includes figures demonstrating how the syntax tree will be built for the initial grammar. You are encouraged to create similar visualizations of productions added in future tasks.
 
+Task 1 is also **much** more detailed in its description of how to go about organizing the project. While this level of direction will not be given in the subsequent tasks, you should aim to keep everything as comparmentalized, clean, and easy to build on as task 1 is. 
+
+It is a good idea to sweep each task 2-3 times after completion making it cleaner, replacing repeated code with function calls, and generally simplifying wherever possible. This will save you time in the long run, as simpler, more organized code is drastically easier to build on.
+
+Every task will expand the grammar; your job is to expand the scanner, parser, data structures, parsing methods, and evaluation methods to meet the new requirements.
+
 [TASK 1](./instructions/task_1.md) : Tokenization, Parsing and Evaluation of arithmetics in Cambridge Polish Notation
 
 [TASK 2](./instructions/task_2.md) : Symbol definition and evaluation.
 
-TASK 3 : Typecasting
+[TASK 3](./instructions/task_3.md) : Typecasting
 
 TASK 4 : Conditionals, comparisons, read, random and print
 
