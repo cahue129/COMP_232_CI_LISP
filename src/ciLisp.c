@@ -87,7 +87,7 @@ AST_NODE *createFunctionNode(char *funcName, AST_NODE *opList)
     // For CUSTOM_OPER functions, you should simply assign the "ident" pointer to the passed in funcName.
     // For functions other than CUSTOM_OPER, you should free the funcName after you've assigned the OPER_TYPE.
 
-    return node;
+    return NULL;
 }
 
 
@@ -98,6 +98,7 @@ AST_NODE *createFunctionNode(char *funcName, AST_NODE *opList)
 AST_NODE *addOperandToList(AST_NODE *newHead, AST_NODE *list)
 {
     // TODO
+    return NULL;
 }
 
 
@@ -114,8 +115,6 @@ RET_VAL evalNumNode(AST_NODE *node)
 
     // TODO populate result with the values stored in the node.
     // SEE: AST_NODE, AST_NODE_TYPE, NUM_AST_NODE
-
-
     return result;
 }
 

@@ -1,5 +1,9 @@
-cmake-build-debug
+*build*
 .DS_Store
 .idea
 *.aux
 *.log
+.vscode
+
+src/flex
+src/bison
