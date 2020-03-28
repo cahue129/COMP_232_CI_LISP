@@ -4,6 +4,3 @@
 *.aux
 *.log
 .vscode
-
-src/flex
-src/bison
