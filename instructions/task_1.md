@@ -325,7 +325,7 @@ The `eval` function takes as input a generic **AST_NODE \***. Its job is to dete
 
 `evalFuncNode` should check which **OPER_TYPE** the **FUNCTION\_AST\_NODE** uses, and call an appropriate function to evaluate the result of running that operation with the input referenced linked list of operands.
 
-You will need to create functions to evaluate each of these operations given their inputs.
+You will need to create functions to evaluate each of these operations given their inputs. The remaining function types in the `FUNC_TYPE` enumeration will be defined later in the project.
 
 * neg
 	* unary
