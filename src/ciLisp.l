@@ -54,9 +54,7 @@ func "neg"|"abs"|"add"|"sub"|"mult"|"div"
 
 /*
  * The code below should NOT be edited except to comment or uncomment
- * the "freopen" call in the main. When this call is commented, the fprintf
- * calls to stderr will appear in red in the console. When it is uncommented,
- * they will not appear in the console.
+ * the "freopen" call in the main.
  */
 
 #include <stdio.h>
@@ -64,19 +62,15 @@ func "neg"|"abs"|"add"|"sub"|"mult"|"div"
 int main(int argc, char **argv)
 {
     int input_from_file = 0;
-    flex_bison_log_file = stderr;
-
-    // Comment the line below get inputs from the file specified in the program arguments
-    // Otherwise they will need to be typed into the console
-    freopen(argv[1], "r", stdin); input_from_file = 1;
-
-    // Comment the line below to have flex and bison logging appear in stderr (red in the console)
-    // Otherwise, this logging will appear in the logs folder.
     flex_bison_log_file = fopen(FLEX_BISON_LOG_PATH, "w");
+
+    // Comment the line below to type inputs directly into the console.
+    // Otherwise, they will be read from the file specified in the first program argument.
+    freopen(argv[1], "r", stdin); input_from_file = 1;
 
     while(1) {
         if (!input_from_file)
-            printf(">: ");
+            printf("> ");
         if (yyparse()) {
             YY_FLUSH_BUFFER;
         }

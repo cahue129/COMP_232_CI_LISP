@@ -11,7 +11,7 @@
 
 %token <sval> FUNC
 %token <dval> INT DOUBLE
-%token LPAREN RPAREN EOL QUIT EOFT INVALID
+%token LPAREN RPAREN EOL QUIT EOFT
 
 %type <astNode> s_expr f_expr number s_expr_list
 

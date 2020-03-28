@@ -19,7 +19,7 @@ You may want to check out the [sample runs](#sample-runs) below better understan
 The initial grammar is as follows:
 
 ```
-program ::= s_expr EOL
+program ::= s_expr EOL | s_expr EOFT | EOFT
 
 s_expr ::= f_expr | number | QUIT
 
@@ -169,9 +169,9 @@ First, it is necessary to define all tokens and all non-terminals within the gra
 
 %token <sval> FUNC
 %token <dval> INT DOUBLE
-%token LPAREN RPAREN EOL QUIT
+%token LPAREN RPAREN EOL QUIT EOFT
 
-%type <astNode> s_expr f_expr number 
+%type <astNode> s_expr f_expr number s_expr_list
 ```
 
 The union contains all types that **token**s and **type**s will have. In this case, **token** and **type** values will all be stored as *double*, *char \** or *ast_node \**. (We will discuss the *ast_node* type later in this document).
@@ -180,7 +180,7 @@ The following three lines define tokens as follows:
 
 * **FUNC** tokens, with data stored as *char \**
 * **INT** and **DOUBLE** tokens, with data stored as *double*
-* **LPAREN**, **RPAREN**, **EOL** and **QUIT** tokens, with no stored value (the tokens themselves convey all necessary information)
+* **LPAREN**, **RPAREN**, **EOL**, **QUIT** and **EOFT** tokens, with no stored value (the tokens themselves convey all necessary information)
 
 The token definitions are followed by type definitions. The data for types **s_expr**, **f_expr** and **number** is stored in *ast_node \** form. We will discuss these further after we finish discussion of tokenization.
 
@@ -192,29 +192,39 @@ Use the **INT** tokenization as an example for double (pay attention to how the 
 
 While there is a rule to tokenize functions, most of the function names are missing and therefore won't be tokenized until they are added!
 
-Pay attention to the `fprintf` calls made for debugging purposes each time a token is created.  These will display in red in the console, unless the `freopen` in the main at the bottom of [ciLisp.l](../src/ciLisp.l) is uncommented. Any tokenizations that you add should include similar prints.
+Pay attention to the `llog` calls made for debugging purposes each time a token is created.  These calls will place messages in the `flex_bison.log` file in the `logs` directory, which will be useful for debugging purposes.
 
 ## PARSING
 
 The goal of the parser is to construct an abstract syntax tree after tokenization. Most of the productions in your grammar will have an equivalent production in [ciLisp.y](../src/ciLisp.y), which is the configuration file for the parser.
 
-The first production in [ciLisp.y](../src/ciLisp.y) :
+The first set of productions in [ciLisp.y](../src/ciLisp.y) are for parsing programs:
 
 ```bison
 program:
     s_expr EOL {
-        fprintf(stderr, "yacc: program ::= s_expr EOL\n");
+        ylog(program, s_expr EOL);
         if ($1) {
             printRetVal(eval($1));
-            freeNode($1);
+            YYACCEPT;
         }
+    }
+    | s_expr EOFT {
+        ylog(program, s_expr EOFT);
+        if ($1) {
+            printRetVal(eval($1));
+        }
+        exit(EXIT_SUCCESS);
+    }
+    | EOFT {
+        exit(EXIT_SUCCESS);
     };
 ```
 
 is the implementation of the first production in the grammar itself:
 
 ```
-program ::= s_expr EOL
+program ::= s_expr EOL | s_expr EOFT | EOFT
 ```
 
 The first part of the production configuration `program: s_expr EOL` denotes that when parsing a **program** can be created via reduction from an **s_expr** followed by an **EOL** token. The values of this **s_expr** and **EOL** can be referenced with `$1` and `$2` respectively. If there were a third element in the reduction to a **program**, that third element's value could be references with `$3` and so on.
@@ -223,17 +233,17 @@ The rest of the production, this block:
 
 ```bison
 {
-    fprintf(stderr, "yacc: program ::= s_expr EOL\n");
+    ylog(program, s_expr EOL);
     if ($1) {
         printRetVal(eval($1));
-        freeNode($1);
+        YYACCEPT;
     }
-};
+}
 ```
 
 denotes what should be done when that reduction is made.
 
-The `fprintf` call is a debug print, stating which reduction was made. Like those in the tokenizer, these `fprintf` calls will display in red unless the `freopen` in the main at the bottom of [ciLisp.l](../src/ciLisp.l) is uncommented. Any productions that you implement should include similar prints.
+The `ylog` call is a debug print (made to `logs/bison_flex.log`), stating which reduction was made. Any productions that you implement should include similar `ylog` calls. The `YYACCEPT` definition essentially means "we're done here, that was a valid program". Step through the generated parser in the `src/bison` directory after running if you want to know more about it.
 
 The line `printRetVal(eval($1))` first calls the `eval` function on `$1` and then prints the resulting **RET\_VAL**. Note that `$1` is the value of the **s_expr** being used in the reduction, and that any **s_expr**'s value is an **AST\_NODE \*** as defined further up in [ciLisp.y](../src/ciLisp.y).
 
@@ -244,18 +254,18 @@ The rest of the yacc file is incomplete. Some productions are missing bodies, wh
 ```bison
 s_expr:
     number {
-        fprintf(stderr, "yacc: s_expr ::= number\n");
+        ylog(s_expr, number);
         $$ = $1;
     }
     | f_expr {
-        
+
     }
     | QUIT {
-        fprintf(stderr, "yacc: s_expr ::= QUIT\n");
+        ylog(s_expr, QUIT);
         exit(EXIT_SUCCESS);
     }
     | error {
-        fprintf(stderr, "yacc: s_expr ::= error\n");
+        ylog(s_expr, error);
         yyerror("unexpected token");
         $$ = NULL;
     };
@@ -272,7 +282,7 @@ f_expr:
 
 s_expr_list:
     s_expr {
-        fprintf(stderr, "yacc: s_expr_list ::= s_expr\n");
+        ylog(s_expr_list, s_expr);
         $$ = $1;
     };
 ```
@@ -400,15 +410,15 @@ In order to see our outputs, it is necessary to define a function to print **RET
 
 ## <a name="sample-runs"></a>SAMLPLE RUNS
 
-Inputs are on the same line as the `>`, and the output is printed below (along with any warnings).
+Inputs are on the same line as the `>`, and the output is printed below (along with any warnings). These sample runs are 
 
 ### neg
 ```
 > (neg 5)
 Integer : -5
 
-> (neg 5.0)
-Double : -5.000000
+> (neg 5.5)
+Double : -5.500000
 
 > (neg -5.0)
 Double : 5.000000
