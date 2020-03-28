@@ -42,7 +42,7 @@ INT ::= optional +/-,
 DOUBLE ::= optional +/-,
 	then some digits,
 	then a decimal point,
-	then optional some more digits
+	then optionally some more digits
 	
 QUIT ::= "quit"
 ```
