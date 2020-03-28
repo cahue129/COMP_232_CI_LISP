@@ -45,6 +45,8 @@ Tasks **must** be completed sequentially. If you implement tasks 1, 2, 4 and 5, 
 
 ##<a name="tasks"></a> Tasks
 
+Task 1 includes figures demonstrating how the syntax tree will be built for the initial grammar. You are encouraged to create similar visualizations of productions added in future tasks.
+
 [TASK 1](./instructions/task_1.md) : Tokenization, Parsing and Evaluation of arithmetics in Cambridge Polish Notation
 
 [TASK 2](./instructions/task_2.md) : Symbol definition and evaluation.
