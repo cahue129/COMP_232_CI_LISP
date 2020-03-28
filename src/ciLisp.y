@@ -10,7 +10,7 @@
 
 %token <sval> FUNC
 %token <dval> INT DOUBLE
-%token LPAREN RPAREN EOL QUIT
+%token LPAREN RPAREN EOL QUIT EOFT
 
 %type <astNode> s_expr f_expr number s_expr_list
 
@@ -21,8 +21,18 @@ program:
         fprintf(stderr, "yacc: program ::= s_expr EOL\n");
         if ($1) {
             printRetVal(eval($1));
-            freeNode($1);
+            YYACCEPT;
         }
+    }
+    | s_expr EOFT {
+        fprintf(stderr, "yacc: program ::= s_expr EOFT\n");
+        if ($1) {
+            printRetVal(eval($1));
+        }
+        exit(EXIT_SUCCESS);
+    }
+    | EOFT {
+        exit(EXIT_SUCCESS);
     };
 
 s_expr:
