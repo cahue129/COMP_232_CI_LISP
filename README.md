@@ -47,7 +47,7 @@ Tasks **must** be completed sequentially. If you implement tasks 1, 2, 4 and 5, 
 
 Task 1 includes figures demonstrating how the syntax tree will be built for the initial grammar. You are encouraged to create similar visualizations of productions added in future tasks.
 
-Task 1 is also **much** more detailed in its description of how to go about organizing the project. While this level of direction will not be given in the subsequent tasks, you should aim to keep everything as comparmentalized, clean, and easy to build on as task 1 is. 
+Task 1 is also **much** more detailed in its description of how to go about organizing the project. This is to give you a feel for we want to organize the project for ease of expansion. While this level of direction will not be given in the subsequent tasks, you should aim to keep everything as comparmentalized, clean, and easy to build on as task 1 is. 
 
 It is a good idea to sweep each task 2-3 times after completion making it cleaner, replacing repeated code with function calls, and generally simplifying wherever possible. This will save you time in the long run, as simpler, more organized code is drastically easier to build on.
 
