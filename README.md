@@ -34,14 +34,14 @@ Documentation should be broken into the following sections:
 	* Sample runs should be organized by task; there should be sample runs showing that everything in task 1 still works in the up-to-date implementation, and so on up through the most recent task.
 * Known Bugs
 	* If anything is not functioning to specification, you are responsible enough for testing enough to recognize that this is the case and **fix it**. If you give up on fixing something, you are required to list it here.
-	* Bugs which are discovered by the grader but not listed here will be graded **harshly**. Bugs which are listed here will be graded **nicely**.
+	* Bugs which are discovered by the grader but not listed here will be graded **harshly**. Bugs which are listed here will be graded **nicely**, within reason.
 	* Known bugs should also be organized by task, and should be well-described.
 	* Lazy bug descriptions which don't go into detail about what is going wrong ("\<functionality\> doesn't work", "\<feature\> throws an error") will be graded as if the bug was not listed here.
 	* This includes bugs that were created in functionality from prior tasks. If your task 5 breaks your task 3, we will check your task 3 submission if the bug is noted here, but if it is not noted here then we will assume that task 3 never worked and grade accordingly.
 
 Doctored sample runs or otherwise intentionally misleading documentation will be considered **cheating** and will result in an automatic 0 for the whole project. Let us be clear: the grader will run the tests in your sample runs (in addition to many other tests), and if they don't work as they appear to in your documentation then you will fail.
 
-Tasks **must** be completed sequentially. If you implement tasks 1, 2, 4 and 5, you will only receive points for tasks 1 and 2 because 3 was never done.
+Tasks **must** be completed sequentially. If you implement tasks 1, 2, 4 and 5, you will only receive points for tasks 1 and 2 because 3 was never done. You should not move on from a task until you have the functionality from that task and all prior tasks working flawlessly in a single project. If your task 2 breaks stuff from task 1, you are not ready to move on to task 3.
 
 
 ##<a name="tasks"></a> Tasks
@@ -62,7 +62,7 @@ Every task will expand the grammar; your job is to expand the scanner, parser, d
 
 [TASK 4](./instructions/task_4.md) : Conditionals, comparisons, read, random and print
 
-TASK 5 : Composable, recursion-capable user-defined functions
+[TASK 5](./instructions/task_5.md) : Composable, recursion-capable user-defined functions
 
 ## Point Breakdown
 
