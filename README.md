@@ -30,6 +30,7 @@ Documentation should be broken into the following sections:
 	* Summarize what has been done so far. Specify which tasks have been completed so far.
 * Sample Runs
 	* Sample runs should **all** come from the most recent implementation. Sample runs which were done to test previous tasks should be **done again** with the new implementation.
+	* You'll save a lot of time here if you save all of your test inputs for each task in the `inputs` folder and keep them organized!
 	* Sample runs should be organized by task; there should be sample runs showing that everything in task 1 still works in the up-to-date implementation, and so on up through the most recent task.
 * Known Bugs
 	* If anything is not functioning to specification, you are responsible enough for testing enough to recognize that this is the case and **fix it**. If you give up on fixing something, you are required to list it here.
@@ -59,7 +60,7 @@ Every task will expand the grammar; your job is to expand the scanner, parser, d
 
 [TASK 3](./instructions/task_3.md) : Typecasting
 
-TASK 4 : Conditionals, comparisons, read, random and print
+[TASK 4](./instructions/task_4.md) : Conditionals, comparisons, read, random and print
 
 TASK 5 : Composable, recursion-capable user-defined functions
 
