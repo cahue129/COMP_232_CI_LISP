@@ -247,8 +247,6 @@ The `ylog` call is a debug print (made to `logs/bison_flex.log`), stating which 
 
 The line `printRetVal(eval($1))` first calls the `eval` function on `$1` and then prints the resulting **RET\_VAL**. Note that `$1` is the value of the **s_expr** being used in the reduction, and that any **s_expr**'s value is an **AST\_NODE \*** as defined further up in [ciLisp.y](../src/ciLisp.y).
 
-Then, the line `freeNode($1)` recursively frees the abstract syntax tree, starting from the **AST_NODE** references by `$1`, which is the root of the tree.
-
 The rest of the yacc file is incomplete. Some productions are missing bodies, while others are missing entirely:
 
 ```bison
