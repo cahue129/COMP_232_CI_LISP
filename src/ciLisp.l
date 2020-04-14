@@ -34,7 +34,6 @@ func "neg"|"abs"|"add"|"sub"|"mult"|"div"
 
 [\n] {
     llog(EOL);
-    YY_FLUSH_BUFFER;
     return EOL;
     }
 
