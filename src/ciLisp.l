@@ -42,7 +42,7 @@ func "neg"|"abs"|"add"|"sub"|"mult"|"div"
     return EOFT;
     }
 
-[ \t] ; /* skip whitespace */
+[ \t\r] ; /* skip whitespace */
 
 
 . { // anything else
