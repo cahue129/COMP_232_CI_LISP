@@ -87,7 +87,6 @@ You should use a linked list of symbols in each scope to keep track of the symbo
 typedef struct symbol_table_node {
     char *id;
     AST_NODE *value;
-    SYMBOL_TYPE symbolType;
     struct symbol_table_node *next;
 } SYMBOL_TABLE_NODE;
 ```
