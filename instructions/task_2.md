@@ -24,7 +24,7 @@ FUNC ::= neg | abs | add | sub |
 
 let_section ::= <empty> | ( let let_list )
 
-let_list ::= let_elem | let_list let_elem
+let_list ::= let_elem | let_elem let_list
 
 let_elem ::= ( SYMBOL s_expr )
 
