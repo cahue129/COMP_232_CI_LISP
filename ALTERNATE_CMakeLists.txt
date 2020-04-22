@@ -30,4 +30,11 @@ add_executable(
 set_property(TARGET cilisp PROPERTY C_STANDARD 11)
 set_property(TARGET cilisp PROPERTY C_STANDARD_REQUIRED ON)
 
+target_include_directories(cilisp PRIVATE src/flex)
+target_include_directories(cilisp PRIVATE src/bison)
+
+target_sources(cilisp PRIVATE src/ciLisp.c src/ciLisp.h)
+target_sources(cilisp PRIVATE ${BISON_ciLispParser_OUTPUTS})
+target_sources(cilisp PRIVATE ${FLEX_ciLispScanner_OUTPUTS})
+
 target_link_libraries(cilisp m)
